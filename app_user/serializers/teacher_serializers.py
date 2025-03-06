@@ -1,31 +1,20 @@
-from app_user import serializers
-from app_user.models import User
+from rest_framework import serializers
+from app_user.models import Course
+from ..models import *
 
-
-class RegisterSerializer(serializers.ModelSerializer):
-
-    confirm_password = serializers.CharField(required=True)
-
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ("id","is_user","is_admin","full_name","phone","password","confirm_password")
+        model = Course
+        fields = ['id', 'title']
 
-    def validate(self, data):
-        password = data.get("password")
-        confirm_password = data.get("confirm_password")
-
-        if password != confirm_password:
-            raise serializers.ValidationError("Passwords must match")
-
-        return data
+class TeacherSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    class Meta:
+        model = Teacher
+        fields = ['id','full_name', 'descriptions']
 
 
-    def create(self, validated_data):
-        password = validated_data.get("password")
-        validated_data.pop("confirm_password")
-
-        user = User.objects.create(**validated_data)
-        user.set_password(password)
-        user.is_active = True
-        user.save()
-        return user
+class TeacherGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = ['full_name', 'descriptions']

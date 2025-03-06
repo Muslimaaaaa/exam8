@@ -1,4 +1,5 @@
-from .  auth import *
-from . student import *
-from . teacher import *
-from . course import *
+from .auth import *
+from .student import *
+from .teacher import *
+from .attendance import *
+from .group import *

@@ -1,9 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-
-from django.db import models
-import re
 from django.core.validators import RegexValidator
+from django.db import models
+
 
 class UserManager(BaseUserManager):
     def create_user(self, phone, password=None, **extra_fields):
@@ -23,6 +22,8 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(phone, password, **extra_fields)
 
+
+# User model
 class User(AbstractBaseUser, PermissionsMixin):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,14}$',
                                  message="Phone number must be entered in the format: '9989012345678'. Up to 14 digits allowed.")
