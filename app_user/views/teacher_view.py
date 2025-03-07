@@ -1,73 +1,59 @@
-from app_user.models import Teacher
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import status, filters
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.pagination import PageNumberPagination
+from ..models import User, Teacher, Group
+from ..serializers import TeacherSerializer, UserSerializer, auth_serializers, CreateTeacherSerializer, CourseSerializer, \
+    GroupSerializer
+from rest_framework.permissions import IsAdminUser
 
-from app_user.serializers import UserSerializer
-from app_user.serializers.teacher_serializers import TeacherSerializer, TeacherGetSerializer
 
-class TeacherViewSet(viewsets.ModelViewSet):
-    queryset = Teacher.objects.all()
-    serializer_class = TeacherSerializer
+class TeacherApiView(APIView):
+    permission_classes = [IsAdminUser]
 
-class TeacherViewApi(APIView):
-    permission_classes = [IsAuthenticated]
-    @swagger_auto_schema(request_body=TeacherSerializer)
+    pagination_class = PageNumberPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['user__phone', 'user__full_name']
+
+    @swagger_auto_schema(request_body=CreateTeacherSerializer)
     def post(self, request):
-        serializer = TeacherSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        serializer = CreateTeacherSerializer(data=request.data)
+        if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        # user_data = request.data.get('user', {})
-        # user_serializer = UserSerializer(data=user_data)
-        # if user_serializer.is_valid():
-        #     user = user_serializer.save()
-
+            return Response({'status': True, 'detail': 'Teacher account created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        teachers = Teacher.objects.all().order_by("id")
-        serializer = TeacherGetSerializer(teachers, many=True)
-        return Response(data=serializer.data)
+        teachers = Teacher.objects.all()
+        serializer = TeacherSerializer(teachers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-class TeacherApiViewId(APIView):
-    @swagger_auto_schema(request_body=TeacherGetSerializer)
-    def get(self, request, pk):
-        try:
-            user = Teacher.objects.get(pk=pk)
-            serializer = UserSerializer(user)
-            return Response(data=serializer.data)
-        except Exception as e:
-            return Response(data={'error': e})
+    @swagger_auto_schema(request_body=CreateTeacherSerializer)
+    def put(self, request, teacher_id):
+        teacher = get_object_or_404(Teacher, id=teacher_id)
+        serializer = CreateTeacherSerializer(teacher, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': True, 'detail': "Teacher account updated"}, status=status.HTTP_200_OK)
+        return Response({'status': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(id=pk)
-            serializer = TeacherGetSerializer(teacher, data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(data=serializer.data)
-        except Exception as e:
-            return Response(data={'error': e})
 
-    def patch(self, request, pk):
+class WorkerGroupsAPIView(APIView):
+    def get(self, request, worker_id):
         try:
-            teacher = Teacher.objects.get(pk=pk)
-            serializer = TeacherGetSerializer(teacher, data=request.data, partial=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(data=serializer.data)
-        except Exception as e:
-            return Response(data={'error': e})
+            worker = Teacher.objects.get(id=worker_id)
 
-    def delete(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(pk=pk)
-            teacher.delete()
-            return Response(data={"message": f"{pk} delete student"})
-        except Exception as e:
-            return Response(data={'error': e})
+            groups = Group.objects.filter(teacher=worker)
+
+            serializer = GroupSerializer(groups, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Teacher.DoesNotExist:
+            return Response({"error": "Worker not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 

@@ -49,3 +49,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+
+class TokenModel(models.Model):
+    date = models.DateField()
+    token = models.TextField()
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.date)

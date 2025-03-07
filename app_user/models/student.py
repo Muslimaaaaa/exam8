@@ -1,5 +1,4 @@
 from django.db import models
-
 from .group import Group
 from .auth import User
 from .teacher import *

@@ -2,7 +2,6 @@ from django.db import models
 from ..models import *
 from .group import Group
 
-
 class AttendanceLevel(models.Model):
     title = models.CharField(max_length=50)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
