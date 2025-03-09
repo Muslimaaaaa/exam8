@@ -1,4 +1,5 @@
 from django.db import models
+
 from . import Course, Student, Group
 from ..models import *
 
@@ -12,11 +13,13 @@ class Topics(models.Model):
     def __str__(self):
         return self.title
 
+
 class GroupHomeWork(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
+    group = models.ForeignKey(Groupm, on_delete=models.RESTRICT)
     topic = models.ForeignKey(Topics, on_delete=models.RESTRICT)
     is_active = models.BooleanField(default=True)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
+
 
 class HomeWork(models.Model):
     groupHomeWork = models.ForeignKey(GroupHomeWork, on_delete=models.RESTRICT)

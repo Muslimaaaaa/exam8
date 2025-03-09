@@ -1,52 +1,52 @@
 from django.db import models
 
-class Subject(models.Model):
-    title = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
+from . import Course, Teacher
+from ..models import *
 
-    def str(self):
+
+class Day(models.Model):
+    title = models.CharField(max_length=50)
+    descriptions = models.CharField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = 'Subject'
-        verbose_name_plural = 'Subjects'
+
+class Rooms(models.Model):
+    title = models.CharField(max_length=50)
+    descriptions = models.CharField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
 
 class TableType(models.Model):
     title = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
+    descriptions = models.CharField(max_length=500, blank=True, null=True)
 
-    def str(self):
+    def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = 'Table Type'
-        verbose_name_plural = 'Table Types'
 
 class Table(models.Model):
     start_time = models.TimeField()
-    finish_time = models.TimeField()
-    room = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
-    type = models.ForeignKey(TableType, on_delete=models.CASCADE, related_name='tables')
-
-    def str(self):
-        return f"{self.room} ({self.start_time} - {self.finish_time})"
-
-    class Meta:
-        verbose_name = 'Table'
-        verbose_name_plural = 'Tables'
+    end_time = models.TimeField()
+    room = models.ForeignKey(Rooms, on_delete=models.RESTRICT)
+    type = models.ForeignKey(TableType, on_delete=models.RESTRICT)
+    descriptions = models.CharField(max_length=500, blank=True, null=True)
+    def __str__(self):
+          return f"ID: {self.id} | ".__str__()
 
 class Group(models.Model):
-    title = models.CharField(max_length=100)
-    worker = models.ForeignKey('app_user.Teacher', on_delete=models.CASCADE, related_name='groups',null=True, blank=True)
-    subject = models.ForeignKey('Subject', on_delete=models.CASCADE, related_name='groups')
-    active = models.BooleanField(default=True)
-    description = models.TextField(null=True, blank=True)
-    table = models.ForeignKey('Table', on_delete=models.SET_NULL, null=True, blank=True, related_name='groups')
+    title = models.CharField(max_length=50, unique=True)
+    course = models.ForeignKey(Course, on_delete=models.RESTRICT)
+    teacher = models.ManyToManyField(Worker, related_name='teacher')
+    table = models.ForeignKey(Table, on_delete=models.RESTRICT)
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
-    def str(self):
-        return self.title
+    price = models.CharField(max_length=15, blank=True, null=True)
+    descriptions = models.CharField(max_length=500, blank=True, null=True)
 
-    class Meta:
-        verbose_name = 'Group'
-        verbose_name_plural = 'Groups'
+    def __str__(self):
+        return f"{self.id} | {self.title}"
