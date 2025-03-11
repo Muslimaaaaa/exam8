@@ -1,16 +1,12 @@
 from rest_framework import serializers
 
-from app_user.models import Groupm, Subject, TableType, Table, Course
+from ..models import Group, TableType, Table, Course
+
 
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Groupm
-        fields = '__all__'
-
-class SubjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
+        model = Group
         fields = '__all__'
 
 class TableTypeSerializer(serializers.ModelSerializer):

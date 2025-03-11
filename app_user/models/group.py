@@ -1,8 +1,7 @@
 from django.db import models
+from .teacher import Course, Teacher
 
-from . import Course, Teacher
 from ..models import *
-
 
 class Day(models.Model):
     title = models.CharField(max_length=50)
@@ -40,7 +39,7 @@ class Table(models.Model):
 class Group(models.Model):
     title = models.CharField(max_length=50, unique=True)
     course = models.ForeignKey(Course, on_delete=models.RESTRICT)
-    teacher = models.ManyToManyField(Worker, related_name='teacher')
+    teacher = models.ManyToManyField(Teacher, related_name='teacher')
     table = models.ForeignKey(Table, on_delete=models.RESTRICT)
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)

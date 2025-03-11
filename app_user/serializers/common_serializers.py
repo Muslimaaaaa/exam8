@@ -1,6 +1,6 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-from ..models import Student, Parents, User, Groupm, Teacher, Table, Course, TableType, Rooms, Student
+from ..models import Student, Parents, User, Group, Teacher, Table, Course, TableType, Rooms, Student
 from ..models.group import Table
 from rest_framework import serializers
 
@@ -36,7 +36,7 @@ class TabelSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Groupm
+        model = Group
         fields = ['title', 'price', 'descriptions', 'course', 'teacher', 'table']
 
     def create(self, validated_data):
@@ -56,7 +56,7 @@ class GroupSerializer(serializers.ModelSerializer):
         table = Table.objects.get(id=table_id) if table_id else None
         teacher = Teacher.objects.filter(id__in=teacher_ids) if teacher_ids else None
 
-        group = Groupm.objects.create(
+        group = Group.objects.create(
             title=validated_data.get('title'),
             course=course,
             price=validated_data.get('price'),

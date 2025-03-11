@@ -15,7 +15,7 @@ class Topics(models.Model):
 
 
 class GroupHomeWork(models.Model):
-    group = models.ForeignKey(Groupm, on_delete=models.RESTRICT)
+    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
     topic = models.ForeignKey(Topics, on_delete=models.RESTRICT)
     is_active = models.BooleanField(default=True)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
