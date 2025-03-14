@@ -1,6 +1,7 @@
 from django.db import models
-from . import Student, Group
-from ..models import *
+
+from app_user.models import Student, Group
+
 
 class AttendanceLevel(models.Model):
     title = models.CharField(max_length=50)

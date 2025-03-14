@@ -1,7 +1,6 @@
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
 from .auth import User
 
 
@@ -25,10 +24,10 @@ class Departments(models.Model):
     def __str__(self):
         return self.title
 
-class Worker(models.Model):
+class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    departments = models.ManyToManyField(Departments, related_name='worker')
-    course = models.ManyToManyField(Course, related_name='worker')
+    departments = models.ManyToManyField(Departments, related_name='teacher')
+    course = models.ManyToManyField(Course, related_name='teacher')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     descriptions = models.CharField(max_length=500, blank=True, null=True)

@@ -1,10 +1,10 @@
 from django.forms import ValidationError
 from rest_framework import serializers
 
-# from App.models.worker import Departments
-from ..models import Student, Parents, User, Departments, Course
+# from App.models.teacher import Departments
+from ..models import Student, Parents, User, Departments, Course, Teacher
 from rest_framework import serializers
-from ..models import User, Worker
+from ..models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,13 +21,13 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class WorkerSerializer(serializers.ModelSerializer):
+class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['phone', 'password', 'full_name']
 
 
-class CreateWorkerSerializer(serializers.ModelSerializer):
+class CreateTeacherSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(write_only=True, required=True)
     password = serializers.CharField(write_only=True, required=True)
     full_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
@@ -58,7 +58,7 @@ class CreateWorkerSerializer(serializers.ModelSerializer):
             courses.append(course)
 
         user = User.objects.create_user(phone=phone, password=password, full_name=full_name, is_teacher=True)
-        teacher = Worker.objects.create(user=user)
+        teacher = Teacher.objects.create(user=user)
 
         teacher.departments.set(departments)
         teacher.course.set(courses)
