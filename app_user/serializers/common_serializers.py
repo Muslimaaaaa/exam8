@@ -1,6 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-from ..models import Student, Parents, User, Group, Teacher, Table, Course, TableType, Rooms, Student
+from ..models import Student, Parents, User, Group, Worker, Table, Course, TableType, Rooms, Student
+from django.shortcuts import get_object_or_404
 from ..models.group import Table
 from rest_framework import serializers
 
@@ -54,7 +55,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
         course = Course.objects.get(id=course_id) if course_id else None
         table = Table.objects.get(id=table_id) if table_id else None
-        teacher = Teacher.objects.filter(id__in=teacher_ids) if teacher_ids else None
+        teacher = Worker.objects.filter(id__in=teacher_ids) if teacher_ids else None
 
         group = Group.objects.create(
             title=validated_data.get('title'),
@@ -88,11 +89,3 @@ class StudentSerializer(serializers.ModelSerializer):
 class DateRangeSerializer(serializers.Serializer):
     start_date = serializers.DateField()
     end_date = serializers.DateField()
-
-
-class student_data(serializers.Serializer):
-    ID = serializers.ListField(child=serializers.IntegerField())
-
-
-class group_data(serializers.Serializer):
-    ID = serializers.ListField(child=serializers.IntegerField())

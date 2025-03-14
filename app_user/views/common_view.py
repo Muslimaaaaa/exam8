@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from ..models import Group, Departments, Student
-from ..serializers import GroupSerializer, DepartmentSerializer, CourseSerializer, CreateStudentSerializer, DateRangeSerializer, student_data, StudentSerializer, group_data
+from ..serializers import GroupSerializer, DepartmentSerializer, CourseSerializer, CreateStudentSerializer, \
+    DateRangeSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
 from rest_framework import serializers
@@ -137,36 +138,5 @@ class StudentsByRegistrationView(APIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
 
-
-class StudentDataView(APIView):
-    @swagger_auto_schema(request_body=student_data)
-    def post(self, request):
-        serializer = student_data(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        ids = serializer.validated_data.get('ID', [])
-
-        objects = Student.objects.filter(id__in=ids)
-
-        if not objects.exists():
-            return Response({"message": "No students found"}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({"data": StudentSerializer(objects, many=True).data}, status=status.HTTP_200_OK)
-
-
-class GroupDataView(APIView):
-    @swagger_auto_schema(request_body=group_data)
-    def post(self, request):
-        serializer = group_data(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        ids = serializer.validated_data.get('ID', [])
-
-        object = Group.objects.filter(id__in=ids)
-        if not object.exists():
-            return Response({"message": "No groups found"}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({"data": GroupSerializer(object, many=True).data}, status=status.HTTP_200_OK)
 
 

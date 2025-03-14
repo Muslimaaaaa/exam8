@@ -1,7 +1,8 @@
 from django.db import models
-from .teacher import Course, Teacher
 
+from . import Course, Worker
 from ..models import *
+
 
 class Day(models.Model):
     title = models.CharField(max_length=50)
@@ -34,12 +35,12 @@ class Table(models.Model):
     type = models.ForeignKey(TableType, on_delete=models.RESTRICT)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
     def __str__(self):
-          return f"ID: {self.id} | ".__str__()
+          return f"ID: {self.id} | {self.start_time} - {self.end_time}".__str__()
 
 class Group(models.Model):
     title = models.CharField(max_length=50, unique=True)
     course = models.ForeignKey(Course, on_delete=models.RESTRICT)
-    teacher = models.ManyToManyField(Teacher, related_name='teacher')
+    teacher = models.ManyToManyField(Worker, related_name='teacher')
     table = models.ForeignKey(Table, on_delete=models.RESTRICT)
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
@@ -48,4 +49,4 @@ class Group(models.Model):
     descriptions = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.id} | {self.title}"
+        return self.title

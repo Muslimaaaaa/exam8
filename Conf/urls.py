@@ -17,7 +17,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="nematovamuslima53@gmail.com"),
+        contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
@@ -26,7 +26,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('app_user.urls')),
+    path('user/', include('App.urls')),
 
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -35,3 +35,4 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
