@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
 from ..models import User, Teacher, Group
-from ..serializers import TeacherSerializer, UserSerializer, auth_serializer, CreateTeacherSerializer, CourseSerializer, \
+from ..serializers import TeacherSerializer, UserSerializer,CreateTeacherSerializer, CourseSerializer, \
     GroupSerializer
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet

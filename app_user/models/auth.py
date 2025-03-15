@@ -6,6 +6,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
     def create_user(self, phone, password=None, **extra_fields):
+        """ oddiy user yaratish"""
         if not phone:
             raise ValueError('The Phone number must be set')
         user = self.model(phone=phone, **extra_fields)
@@ -14,6 +15,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone, password=None, **extra_fields):
+        """super user yaratish"""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_admin', True)
         if extra_fields.get('is_staff') is not True:
@@ -25,6 +27,7 @@ class UserManager(BaseUserManager):
 
 # User model
 class User(AbstractBaseUser, PermissionsMixin):
+    """User modeli boshqa modellar shu modeldan meros oladi"""
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,14}$',
                                  message="Phone number must be entered in the format: '998900404001'. Up to 14 digits allowed.")
     phone = models.CharField(validators=[phone_regex], max_length=17, unique=True)
