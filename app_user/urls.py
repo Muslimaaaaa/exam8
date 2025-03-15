@@ -5,7 +5,7 @@ from .views.student_view import StudentApiViewSet, ParentsApiView
 from .views import (
     GroupView, StudentsByRegistrationView, TableListCreateView,
     TableRetrieveUpdateDestroyView, DepartmentListCreateView,
-    CourseListCreateView, WorkerGroupsAPIView
+    CourseListCreateView, TeacherGroupsAPIView
 )
 
 # Register ViewSets
@@ -28,5 +28,5 @@ urlpatterns = [
 
     path('courses/', CourseListCreateView.as_view(), name='course-list-create'),
 
-    path('worker/<int:worker_id>/group/', WorkerGroupsAPIView.as_view(), name='worker-courses'),
+    path('worker/<int:worker_id>/group/', TeacherGroupsAPIView.as_view(), name='worker-courses'),
 ]

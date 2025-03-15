@@ -28,7 +28,7 @@ class TeacherApiViewSet(ModelViewSet):
     pagination_class = TeacherPagination
 
 
-class WorkerGroupsAPIView(APIView):
+class TeacherGroupsAPIView(APIView):
     def get(self, request, worker_id):
         try:
             worker = Teacher.objects.get(id=worker_id)
@@ -40,7 +40,3 @@ class WorkerGroupsAPIView(APIView):
 
         except Teacher.DoesNotExist:
             return Response({"error": "Worker not found"}, status=status.HTTP_404_NOT_FOUND)
-
-
-
-

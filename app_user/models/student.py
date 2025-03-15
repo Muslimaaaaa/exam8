@@ -2,7 +2,6 @@ from django.db import models
 from .auth import User
 from .teacher import *
 
-
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     group = models.ManyToManyField('Group', related_name='student')
@@ -16,8 +15,6 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.user.phone} | {self.user.id}"
 
-
-#
 class Parents(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=50, null=True, blank=True)
@@ -29,3 +26,4 @@ class Parents(models.Model):
 
     def __str__(self):
         return self.full_name
+
