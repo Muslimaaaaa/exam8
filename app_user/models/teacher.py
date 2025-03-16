@@ -25,6 +25,7 @@ class Departments(models.Model):
         return self.title
 
 class Teacher(models.Model):
+    #ustozlar modeli
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     departments = models.ManyToManyField(Departments, related_name='teacher')
     course = models.ManyToManyField(Course, related_name='teacher')

@@ -12,12 +12,10 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 
-
 class TeacherPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
-
 
 class TeacherApiViewSet(ModelViewSet):
     queryset = Teacher.objects.all()
@@ -26,7 +24,6 @@ class TeacherApiViewSet(ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['user__phone', 'user__full_name']
     pagination_class = TeacherPagination
-
 
 class TeacherGroupsAPIView(APIView):
     def get(self, request, worker_id):

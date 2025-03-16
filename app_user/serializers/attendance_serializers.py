@@ -9,4 +9,4 @@ class AttendanceLevelSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = '__all__'
+        fields = ['id', 'level', 'level_id', 'created', 'updated', 'student', 'group']

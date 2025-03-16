@@ -7,11 +7,9 @@ from ..serializers import *
 
 class AttendanceLevelApi(ModelViewSet):
     permission_classes = [IsAuthenticated]
-
     pagination_class = PageNumberPagination
     queryset = AttendanceLevel.objects.all().order_by('-id')
     serializer_class = AttendanceLevelSerializer
-
 
 class AttendanceApi(ModelViewSet):
     permission_classes = [IsAuthenticated]

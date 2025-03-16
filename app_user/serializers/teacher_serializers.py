@@ -1,11 +1,8 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-
-# from App.models.teacher import Departments
 from ..models import Student, Parents, User, Departments, Course, Teacher
 from rest_framework import serializers
 from ..models import User
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,12 +17,10 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['phone', 'password', 'full_name']
-
 
 class CreateTeacherSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(write_only=True, required=True)
@@ -66,27 +61,22 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
         return teacher
 
     def update(self, instance, validated_data):
-        """ Update an existing Worker and User details """
-        user = instance.user  # Get the associated User object
+        user = instance.user
 
         phone = validated_data.get('phone', user.phone)
         password = validated_data.get('password', None)
         full_name = validated_data.get('full_name', user.full_name)
-
-        # Update User fields
         user.phone = phone
         if password:
-            user.set_password(password)  # Hash password if provided
+            user.set_password(password)
         user.full_name = full_name
         user.save()
 
-        # Update Departments
         if 'departments' in validated_data:
             department_titles = validated_data['departments']
             departments = [Departments.objects.get_or_create(id=title)[0] for title in department_titles]
             instance.departments.set(departments)
 
-        # Update Courses
         if 'course' in validated_data:
             course_titles = validated_data['course']
             courses = [Course.objects.get_or_create(id=title)[0] for title in course_titles]
@@ -94,7 +84,6 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:

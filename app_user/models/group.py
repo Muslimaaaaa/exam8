@@ -1,9 +1,7 @@
 from django.db import models
-
 from . import Course, Teacher
 from ..models import *
-
-
+# day modeli
 class Day(models.Model):
     title = models.CharField(max_length=50)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
@@ -11,7 +9,7 @@ class Day(models.Model):
     def __str__(self):
         return self.title
 
-
+# xona modeli
 class Rooms(models.Model):
     title = models.CharField(max_length=50)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
@@ -38,6 +36,7 @@ class Table(models.Model):
           return f"ID: {self.id} | {self.start_time} - {self.end_time}".__str__()
 
 class Group(models.Model):
+    # guruh modeli
     title = models.CharField(max_length=50, unique=True)
     course = models.ForeignKey(Course, on_delete=models.RESTRICT)
     teacher = models.ManyToManyField(Teacher, related_name='teacher')

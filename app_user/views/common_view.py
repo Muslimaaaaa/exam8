@@ -4,18 +4,24 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from ..models import Group, Departments, Student
-from ..serializers import GroupSerializer, DepartmentSerializer, CourseSerializer, CreateStudentSerializer, \
-    DateRangeSerializer
+from ..models import Group, Departments, Student, Course, AttendanceLevel, Attendance, Topics, GroupHomeWork, HomeWork, \
+    Month, Payment
+# from ..serializers import GroupSerializer, DepartmentSerializer, CourseSerializer, CreateStudentSerializer, DateRangeSerializer, AttendanceSerializer, AttendanceLevelSerializer
+from ..serializers import *
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from datetime import datetime
 from collections import defaultdict
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+
+from ..models import Table
+from ..serializers import TabelSerializer
 
 
 class GroupView(APIView):
+    permission_classes = [IsAdminUser]
 
     def get(self, request, group_id=None):
         """Retrieve a single group by ID or list all groups."""
@@ -49,11 +55,9 @@ class GroupView(APIView):
         return Response({"message": "Group deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
-from ..models import Table
-from ..serializers import TabelSerializer
-
-
 class TableListCreateView(APIView):
+    permission_classes = [IsAdminUser]
+
     def get(self, request):
         tables = Table.objects.all()
         serializer = TabelSerializer(tables, many=True)
@@ -69,6 +73,8 @@ class TableListCreateView(APIView):
 
 
 class TableRetrieveUpdateDestroyView(APIView):
+    permission_classes = [IsAdminUser]
+
     def get_object(self, pk):
         try:
             return Table.objects.get(pk=pk)
@@ -100,13 +106,15 @@ class TableRetrieveUpdateDestroyView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DepartmentListCreateView(generics.ListCreateAPIView):
+class DepartmentViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
+
     queryset = Departments.objects.all()
     serializer_class = DepartmentSerializer
 
 
-class CourseListCreateView(generics.ListCreateAPIView):
-    queryset = Departments.objects.all()
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
 
@@ -139,4 +147,31 @@ class StudentsByRegistrationView(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
+class TopicsViewSet(viewsets.ModelViewSet):
+    queryset = Topics.objects.all()
+    serializer_class = TopicsSerializer
 
+
+class GroupHomeWorkViewSet(viewsets.ModelViewSet):
+    queryset = GroupHomeWork.objects.all()
+    serializer_class = GroupHomeWorkSerializer
+
+
+class HomeWorkViewSet(viewsets.ModelViewSet):
+    queryset = HomeWork.objects.all()
+    serializer_class = HomeWorkSerializer
+
+
+class BallViewSet(viewsets.ModelViewSet):
+    queryset = Ball.objects.all()
+    serializer_class = BallSerializer
+
+
+class MonthViewSet(viewsets.ModelViewSet):
+    queryset = Month.objects.all()
+    serializer_class = MonthSerializer
+
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
