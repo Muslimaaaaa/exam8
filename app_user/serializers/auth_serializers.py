@@ -7,8 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "phone", "full_name", "is_active", "is_staff", "is_admin", "is_student", "is_teacher", "created", "updated"]
 
-
-
 class LoginSerializer(serializers.Serializer):
     phone = serializers.CharField()
     password = serializers.CharField(write_only=True)

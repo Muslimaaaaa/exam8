@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class TokenModel(models.Model):
+    """token"""
     date = models.DateField()
     token = models.TextField()
     created = models.DateField(auto_now_add=True)

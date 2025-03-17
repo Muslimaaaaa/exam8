@@ -71,8 +71,6 @@ class CreateStudentSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(phone=phone, password=password, full_name=full_name, is_student=True)
 
         student = Student.objects.create(user=user, **validated_data)
-
-        # Assign groups and courses properly
         student.group.set(groups)
         student.course.set(courses)
 

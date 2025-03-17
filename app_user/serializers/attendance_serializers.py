@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import Attendance, AttendanceLevel
-
+# attendance modeli uchun serializers
 class AttendanceLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttendanceLevel
