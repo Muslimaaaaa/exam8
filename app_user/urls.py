@@ -14,17 +14,17 @@ from .views.auth_view import *
 
 # Register ViewSets
 router = DefaultRouter()
-router.register(r'teachers', TeacherApiViewSet, basename='teacher')
 router.register(r'students', StudentApiViewSet, basename='student')
+router.register(r'teachers', TeacherApiViewSet, basename='teacher')
+router.register(r'attendance', AttendanceApi)
 router.register(r'parents', ParentsViewSet)
 router.register(r'departments', DepartmentViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'attendance-levels', AttendanceLevelApi)
-router.register(r'attendance', AttendanceApi)
 router.register(r'TopicsViewSet', TopicsViewSet)
 router.register(r'GroupHomeWork', GroupHomeWorkViewSet)
 router.register(r'HomeWork', HomeWorkViewSet)
-router.register(r'Baholash', BallViewSet)
+router.register(r'ball', BallViewSet)
 router.register(r'payments', PaymentViewSet)
 router.register(r'months', MonthViewSet)
 

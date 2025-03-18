@@ -13,10 +13,8 @@ class Day(models.Model):
 class Rooms(models.Model):
     title = models.CharField(max_length=50)
     descriptions = models.CharField(max_length=500, blank=True, null=True)
-
     def __str__(self):
         return self.title
-
 
 class TableType(models.Model):
     title = models.CharField(max_length=50)
